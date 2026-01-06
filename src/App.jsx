@@ -1,9 +1,10 @@
 import { Upload, Trash2, Download, FileJson } from "lucide-react"
 import React, { useState }  from "react"
 
-const API_BASE = 'https://695254133b3c518fca124652.mockapi.io/api/v1'
 
 export default function AdminPanel(){
+  const apiBaseUrl = 'https://695254133b3c518fca124652.mockapi.io/api/v1';
+
   const [jsonData, setJsonData] = useState('');
   const [fileName, setFileName] = useState('');
   const [status, setStatus] = useState('');
@@ -54,7 +55,7 @@ export default function AdminPanel(){
       if (data.users && data.users.length > 0) {
         for (let i = 0; i < data.users.length; i++) {
           try {
-            await fetch(`${API_BASE}/users`, {
+            await fetch(`${apiBaseUrl}/users`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(data.users[i])
@@ -72,7 +73,7 @@ export default function AdminPanel(){
       if (data.flashcards && data.flashcards.length > 0) {
         for (let i = 0; i < data.flashcards.length; i++) {
           try {
-            await fetch(`${API_BASE}/flashcards`, {
+            await fetch(`${apiBaseUrl}/flashcards`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(data.flashcards[i])
@@ -102,16 +103,16 @@ export default function AdminPanel(){
       let deletedCount = { users: 0, flashcards: 0 };
       
       // Clear flashcards
-      const flashcards = await fetch(`${API_BASE}/flashcards`).then(r => r.json());
+      const flashcards = await fetch(`${apiBaseUrl}/flashcards`).then(r => r.json());
       for (const item of flashcards) {
-        await fetch(`${API_BASE}/flashcards/${item.id}`, { method: 'DELETE' });
+        await fetch(`${apiBaseUrl}/flashcards/${item.id}`, { method: 'DELETE' });
         deletedCount.flashcards++;
       }
       
       // Clear users
-      const users = await fetch(`${API_BASE}/users`).then(r => r.json());
+      const users = await fetch(`${apiBaseUrl}/users`).then(r => r.json());
       for (const item of users) {
-        await fetch(`${API_BASE}/users/${item.id}`, { method: 'DELETE' });
+        await fetch(`${apiBaseUrl}/users/${item.id}`, { method: 'DELETE' });
         deletedCount.users++;
       }
       
@@ -140,7 +141,7 @@ export default function AdminPanel(){
               🎴 Flashcard Admin Panel
           </h1>
           <p className="text-amber-700">
-            Upload JSON file and sync to MockAPI
+            Upload JSON file and sync to MockAPI : {apiBaseUrl}
           </p>
         </div>
         {/*File upload section */}
@@ -235,8 +236,10 @@ export default function AdminPanel(){
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm font-semibold text-blue-900 mb-2">🔗 Test Endpoints:</p>
             <div className="space-y-1 text-xs font-mono text-blue-800">
-              <div>GET {API_BASE}/users</div>
-              <div>GET {API_BASE}/flashcards</div>
+              <div>
+                <a href={`${apiBaseUrl}/users`} target="_blank" rel="noopener noreferrer">GET {apiBaseUrl}/users</a>
+              </div>
+              <a href={`${apiBaseUrl}/flashcards`} target="_blank" rel="noopener noreferrer">GET {apiBaseUrl}/flashcards</a>
             </div>
           </div>
       </div>
